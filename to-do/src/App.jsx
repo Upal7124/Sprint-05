@@ -11,6 +11,8 @@ function App() {
   });
   const [taskText, setTaskText] = useState("");
 
+  const [search, setSearch] = useState("");
+
   const addTask = (text, priority) => {
     if (text.trim() === "") return;
 
@@ -46,22 +48,39 @@ function App() {
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
+  const filteredTasks = tasks.filter((task) =>
+    task.text.toLowerCase().includes(search.toLowerCase()),
+  );
   return (
     <div className="min-h-screen bg-[#0f1117] text-white p-8">
       <h1 className="text-4xl font-bold mb-8">My Task Board</h1>
-
+      <input
+        type="text"
+        placeholder="Search tasks..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="w-full mb-6 rounded-lg bg-[#181b24] px-4 py-3 text-white placeholder-gray-500 outline-none focus:ring-2 focus:ring-blue-500"
+      />
       <div className="grid grid-cols-3 gap-6">
         <Todo
-          tasks={tasks}
+          tasks={filteredTasks}
           addTask={addTask}
           deleteTask={deleteTask}
           moveTask={moveTask}
           editTask={editTask}
         />
 
-        <InProgress tasks={tasks} deleteTask={deleteTask} moveTask={moveTask} />
+        <InProgress
+          tasks={filteredTasks}
+          deleteTask={deleteTask}
+          moveTask={moveTask}
+        />
 
-        <Done tasks={tasks} deleteTask={deleteTask} moveTask={moveTask} />
+        <Done
+          tasks={filteredTasks}
+          deleteTask={deleteTask}
+          moveTask={moveTask}
+        />
       </div>
     </div>
   );
