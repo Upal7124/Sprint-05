@@ -1,18 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Todo from "./components/Todo";
 import InProgress from "./components/InProgress";
 import Done from "./components/Done";
 
 function App() {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(() => {
+    const savedTasks = localStorage.getItem("tasks");
+
+    return savedTasks ? JSON.parse(savedTasks) : [];
+  });
   const [taskText, setTaskText] = useState("");
-  const addTask = (text) => {
+
+  const addTask = (text, priority) => {
     if (text.trim() === "") return;
 
     const newTask = {
       id: Date.now(),
       text: text,
       status: "todo",
+      priority: priority,
     };
 
     setTasks((prevTasks) => [...prevTasks, newTask]);
@@ -29,6 +35,17 @@ function App() {
       ),
     );
   };
+
+  const editTask = (id, newText) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, text: newText } : task,
+      ),
+    );
+  };
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
   return (
     <div className="min-h-screen bg-[#0f1117] text-white p-8">
       <h1 className="text-4xl font-bold mb-8">My Task Board</h1>
@@ -39,6 +56,7 @@ function App() {
           addTask={addTask}
           deleteTask={deleteTask}
           moveTask={moveTask}
+          editTask={editTask}
         />
 
         <InProgress tasks={tasks} deleteTask={deleteTask} moveTask={moveTask} />

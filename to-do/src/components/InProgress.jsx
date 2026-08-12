@@ -1,6 +1,10 @@
 function InProgress({ tasks, moveTask }) {
   const inProgressTasks = tasks.filter((task) => task.status === "inprogress");
-
+  const priorityStyle = {
+    high: "border-l-4 border-red-500",
+    medium: "border-l-4 border-yellow-500",
+    low: "border-l-4 border-green-500",
+  };
   return (
     <div className="bg-[#181b24] rounded-xl p-5 min-h-[500px]">
       <div className="flex items-center justify-between mb-5">
@@ -15,7 +19,9 @@ function InProgress({ tasks, moveTask }) {
         {inProgressTasks.map((task) => (
           <div
             key={task.id}
-            className="bg-[#252936] rounded-lg p-4 flex items-center justify-between gap-4"
+            className={`bg-[#252936] rounded-lg p-4 mb-3 ${
+              priorityStyle[task.priority]
+            }`}
           >
             <span className="text-gray-200 break-words">{task.text}</span>
 
