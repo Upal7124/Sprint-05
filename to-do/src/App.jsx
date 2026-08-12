@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { DndContext } from "@dnd-kit/core";
 
-import Todo from "./components/Todo";
+import ToDo from "./components/Todo";
 import InProgress from "./components/InProgress";
 import Done from "./components/Done";
 
