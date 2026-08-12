@@ -1,12 +1,23 @@
+import { useDroppable } from "@dnd-kit/core";
+import TaskCard from "./TaskCard";
+
 function InProgress({ tasks, moveTask }) {
   const inProgressTasks = tasks.filter((task) => task.status === "inprogress");
+
+
+  const { setNodeRef } = useDroppable({
+    id: "inprogress",
+  });
+
   const priorityStyle = {
     high: "border-l-4 border-red-500",
     medium: "border-l-4 border-yellow-500",
     low: "border-l-4 border-green-500",
   };
+
   return (
-    <div className="bg-[#181b24] rounded-xl p-5 min-h-[500px]">
+    <div ref={setNodeRef} className="bg-[#181b24] rounded-xl p-5 min-h-[500px]">
+      {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <h2 className="text-xl font-semibold text-white">In Progress</h2>
 
@@ -17,30 +28,29 @@ function InProgress({ tasks, moveTask }) {
 
       <div className="space-y-3">
         {inProgressTasks.map((task) => (
-          <div
-            key={task.id}
-            className={`bg-[#252936] rounded-lg p-4 mb-3 ${
-              priorityStyle[task.priority]
-            }`}
-          >
-            <span className="text-gray-200 break-words">{task.text}</span>
+          <TaskCard key={task.id} task={task}>
+            <div className={`rounded-lg ${priorityStyle[task.priority]}`}>
+              <div className="flex justify-between items-center gap-3">
+                <span className="text-gray-200 break-words">{task.text}</span>
 
-            <div className="flex gap-2 shrink-0">
-              <button
-                onClick={() => moveTask(task.id, "todo")}
-                className="px-3 py-1.5 rounded-md bg-gray-500/10 text-gray-300 hover:bg-gray-500/20 transition"
-              >
-                Back
-              </button>
+                <div className="flex gap-2 shrink-0">
+                  <button
+                    onClick={() => moveTask(task.id, "todo")}
+                    className="px-3 py-1.5 rounded-md bg-gray-500/10 text-gray-300 hover:bg-gray-500/20"
+                  >
+                    Back
+                  </button>
 
-              <button
-                onClick={() => moveTask(task.id, "done")}
-                className="px-3 py-1.5 rounded-md bg-green-500/10 text-green-400 hover:bg-green-500/20 transition"
-              >
-                Done
-              </button>
+                  <button
+                    onClick={() => moveTask(task.id, "done")}
+                    className="px-3 py-1.5 rounded-md bg-green-500/10 text-green-400 hover:bg-green-500/20"
+                  >
+                    Done
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
+          </TaskCard>
         ))}
       </div>
 
