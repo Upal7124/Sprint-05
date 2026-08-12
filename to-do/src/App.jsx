@@ -98,7 +98,7 @@ function App() {
 
       <DndContext onDragEnd={handleDragEnd}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Todo
+          <ToDo
             tasks={filteredTasks}
             addTask={addTask}
             deleteTask={deleteTask}
